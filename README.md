@@ -21,3 +21,8 @@ mim install mmaction2==1.1.0
 # install this repo
 python setup.py develop
 ```
+
+## Test the installation
+```bash
+./scripts/demo.sh
+```
