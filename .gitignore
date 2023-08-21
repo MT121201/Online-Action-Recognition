@@ -125,7 +125,6 @@ work_dirs/
 # CCdet
 cache/
 checkpoints/
-*.mp4
 *.caffemodel
 *.onnx
 *.prototxt
