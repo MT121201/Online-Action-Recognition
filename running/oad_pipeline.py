@@ -11,8 +11,8 @@ def draw_bbox(img, bbox, predict, color=(0, 255, 0), thickness=2):
     # import pdb; pdb.set_trace()
     cv2.rectangle(img, (x1, y1), (x2, y2), color, thickness)
     cv2.putText(img, str(predict), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1, color, thickness=2)
-    save_path = './cache/frame.jpg'
-    cv2.imwrite(save_path, img)
+    # save_path = './cache/frame.jpg'
+    # cv2.imwrite(save_path, img)
     return img
 
 def main():
@@ -48,7 +48,6 @@ def main():
     
     cap.release()
     out.release()
-    print("Done")
     pbar.close()
 if __name__ == "__main__":
     main()
