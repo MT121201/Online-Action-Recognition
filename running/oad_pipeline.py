@@ -6,6 +6,8 @@ import cv2
 import numpy as np
 import argparse
 from tqdm import tqdm
+
+
 def draw_bbox(img, bbox, predict, color=(0, 255, 0), thickness=2):
     x1, y1, x2, y2 = bbox[:4]
     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
@@ -20,7 +22,8 @@ def arg_parse():
     parser.add_argument('--threshold', type=float, default=0.5, help='threshold of action model')
     parser.add_argument('--input', type=str, help='path to input video')
     parser.add_argument('--save', type=str, default='./cache/video', help='path to save video')
-    parser.add_argument('--class_name', type=str, default=None, help='class name txt file')
+    parser.add_argument('--class_name', type=str, default='/data/its/oad/triet_test/class.txt', help='class name txt file')
+    parser.add_argument('--device', type=str, default='gpu', help='device')
     args = parser.parse_args()
     return args
 def main():
@@ -32,6 +35,7 @@ def main():
     input_video = args.input
     save_path = args.save
     class_name = args.class_name
+    device = args.device
     # check
     if not os.path.exists(detection_onnx):
         raise ValueError("Detection model not found!")
@@ -44,8 +48,8 @@ def main():
     if class_name is None:
         raise ValueError("Class name not found!")
     # init model
-    detection_model = Detection_model(model_path=detection_onnx, H=800, W=1280)
-    regcornize_action = Regcornize_action(model_path=action_onnx, super_image_size=super_image_size, threshold=threshold)
+    detection_model = Detection_model(model_path=detection_onnx, H=800, W=1280, device=device)
+    regcornize_action = Regcornize_action(model_path=action_onnx, super_image_size=super_image_size, threshold=threshold, device=device)
 
     with open(class_name, 'r') as f:
         class_name = f.read().splitlines()
