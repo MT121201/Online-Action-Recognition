@@ -6,7 +6,7 @@ from torchvision import models, datasets, transforms as T
 import torch
 from PIL import Image
 class Regcornize_action:
-    def __init__ (self, model_path, super_image_size, threshold=0.5):
+    def __init__ (self, model_path, super_image_size, threshold, device):
         self.model_path = model_path
         self.super_image_size = super_image_size
         self.threshold = threshold
@@ -17,10 +17,14 @@ class Regcornize_action:
         T.ToTensor(),
         T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
-        # build model
-        providers = [
-            'CUDAExecutionProvider'
-        ]
+        # Build model with the specified device (CPU or GPU)
+        if device == 'cpu':
+            providers = ['CPUExecutionProvider']
+        elif device == 'gpu':
+            providers = ['CUDAExecutionProvider']
+        else:
+            raise ValueError("Invalid device choice. Use 'cpu' or 'gpu'.")
+
         self.sess = ort.InferenceSession(self.model_path, providers=providers)
     
     def crop_detect_images(self, img, result):

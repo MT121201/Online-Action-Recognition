@@ -37,4 +37,5 @@ python running/oad_pipeline.py
 --input ,type=str, help='path to input video'
 --save ,type=str, default='./cache/video', help='path to save video'
 --class_name ,type=str, default='/data/its/oad/triet_test/class.txt', help='class name txt file'
+--device , type=str , default ="gpu", help="cpu or gpu"
 ```

@@ -7,16 +7,20 @@ import onnxruntime as ort
 from PIL import Image
 import time
 class Detection_model:
-    def __init__(self, model_path, H, W, save_path):
+    def __init__(self, model_path, H, W, device):
         self.model_path = model_path
         self.H = H
         self.W = W
         self.save_path = None
 
-        # build model
-        providers = [
-            'CUDAExecutionProvider'
-        ]
+        # Build model with the specified device (CPU or GPU)
+        if device == 'cpu':
+            providers = ['CPUExecutionProvider']
+        elif device == 'gpu':
+            providers = ['CUDAExecutionProvider']
+        else:
+            raise ValueError("Invalid device choice. Use 'cpu' or 'gpu'.")
+
         self.predictor = ort.InferenceSession(self.model_path, providers=providers)
         self.io_binding = self.predictor.io_binding()
         self.input_tensor = self.predictor.get_inputs()[0]
