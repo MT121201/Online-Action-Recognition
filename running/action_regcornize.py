@@ -2,21 +2,16 @@ import cv2
 import numpy as np
 from collections import deque
 import onnxruntime as ort
-from torchvision import models, datasets, transforms as T
 import torch
 from PIL import Image
+import os
+import time
 class Regcornize_action:
     def __init__ (self, model_path, super_image_size, threshold, device):
         self.model_path = model_path
         self.super_image_size = super_image_size
         self.threshold = threshold
         self.queue = deque(maxlen=super_image_size[0]*super_image_size[1])
-        self.preprocess = T.Compose([
-        T.Resize(256),
-        T.CenterCrop(224),
-        T.ToTensor(),
-        T.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
         # Build model with the specified device (CPU or GPU)
         if device == 'cpu':
             providers = ['CPUExecutionProvider']
@@ -57,18 +52,21 @@ class Regcornize_action:
         super_image = queue_array.reshape(self.super_image_size[0], self.super_image_size[1], 224, 224, 3).swapaxes(1, 2).reshape(3*224, 3*224, 3)
         return super_image
     
+    def save_image(self, img, path):
+        cv2.imwrite(path, img)
+
     def predict(self, img):
-        #convert to PIL
-        img = Image.fromarray(img)
-        input_tensor = self.preprocess(img)
-        input_batch = input_tensor.unsqueeze(0) # create a mini-batch as expected by the model
-        if torch.cuda.is_available():
-            input_batch = input_batch.to('cuda')
-        else:
-            raise Exception("Cuda is not available")
-        # predict
-        with torch.no_grad():
-            output = self.sess.run(None, {'input': input_batch.cpu().numpy()})[0]
+        # preprocess
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        im_pil = Image.fromarray(img)
+        np_img = np.array(im_pil)
+        np_img = np_img.transpose([2, 0, 1]).astype('float32')
+        input_batch = np.expand_dims(np_img, 0)
+        # run inference
+        input_name = self.sess.get_inputs()[0].name
+        output_name = self.sess.get_outputs()[0].name
+        output = self.sess.run([output_name], {input_name: input_batch})[0]
+        
         return output
     
     def run(self, img, result):
@@ -85,7 +83,11 @@ class Regcornize_action:
             # predict
             output = self.predict(super_image)
             # return if output score > threshold
+            
             if np.max(output) > self.threshold:
+                # image_name = str(np.argmax(output)) +'_' + str(time.time()) + '.jpg'
+                # save_path = os.path.join('./cache/infer', image_name)
+                # self.save_image(super_image, save_path)
                 return np.argmax(output)
             else:
                 return None
