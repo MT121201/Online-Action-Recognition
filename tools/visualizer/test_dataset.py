@@ -1,4 +1,5 @@
 from mmpretrain.registry import DATASETS
+import random
 import os
 import mmcv
 import click
@@ -16,6 +17,7 @@ register_all_modules()
               default="configs/oad/repvgg_oad.py", help="your config file")
 @click.option("--save_img_dir",
               default='./cache/debugdata1', help="save image dir")
+
 def main(config_file, save_img_dir):
     cfg = Config.fromfile(config_file)
     classes = cfg['class_name']
@@ -25,7 +27,9 @@ def main(config_file, save_img_dir):
     if isinstance(dataset_cfg, dict):
         dataset = DATASETS.build(dataset_cfg)
 
-    num_draw = len(dataset)
+    num_draw = 200
+    
+    random_selection = random.sample(range(len(dataset)), num_draw)
 
     print('len dataset: ', len(dataset))
 
@@ -38,7 +42,7 @@ def main(config_file, save_img_dir):
 
     print('save images to: ', save_img_dir)
 
-    for idx in tqdm(range(0, num_draw, 1)):
+    for idx in tqdm(random_selection):
 
         sample = dataset[idx]
 
