@@ -1,6 +1,8 @@
 # Prepare training dataset from video
 ## Instruction video
 - Watch [this video](https://drive.google.com/file/d/1jm3JPmuhkjFzd5-oZxjd6MJ-tuAGC_y1/view?usp=sharing) to know how to label, convert, and modify config for training new data.
+- It is worth noting that we use 4 labels for the demo. Have a look at following image:
+![Create Label](../images/label.PNG)
 
 ## Labeling
 ```bash
