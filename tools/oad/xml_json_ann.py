@@ -18,7 +18,7 @@ class DataConverter:
             os.makedirs(self.save_path)
 
     def convert_xml_json(self):
-        video_name = self.video_path.split('/')[-1]
+        video_name =  os.path.splitext(os.path.basename(self.video_path))[0]
         tree = ET.parse(self.xml_path)
         root = tree.getroot()
 
