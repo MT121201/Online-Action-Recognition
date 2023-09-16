@@ -124,7 +124,9 @@ work_dirs/
 
 # CCdet
 cache/
+scripts/
 checkpoints/
+*.mp4
 *.caffemodel
 *.onnx
 *.prototxt
@@ -132,6 +134,7 @@ checkpoints/
 onnx
 ckpts/
 caffemodels/
+*.sh
 show-ort.png 
 show-pt.png
 show-trt.png
@@ -140,6 +143,10 @@ configs/mmcls
 configs/mmdet
 configs/mmyolo
 configs/mmpretrain
-configs/mmaction2
 command/
 experiments/
+visualize/
+mmdeploy-dep/
+ByteTrack/
+mmdeploy/
+mmdeploy/work_dir/

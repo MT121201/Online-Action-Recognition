@@ -58,7 +58,7 @@ class Detection_model:
             self.io_binding.bind_output(output)
         self.predictor.run_with_iobinding(self.io_binding)
         results = self.io_binding.copy_outputs_to_cpu()[0]
-
+        # import pdb; pdb.set_trace()
         # post-processing
         scale_x = w/self.W
         scale_y = h/self.H

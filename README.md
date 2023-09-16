@@ -1,41 +1,28 @@
 # Online-Action-Detection
+Welcome to our GitHub Pages dedicated to online action detection, where we explore innovative techniques to enhance real-time action recognition.
+
+Our approach leverages stack images and 2D CNNs to efficiently extract temporal information as in [SIFAR paper](https://arxiv.org/pdf/2106.14104.pdf), providing an alternative to the resource-intensive 3D convolution methods commonly used in this domain.
+
+The core of our work centers around a light-weight model developed based on the mmpretrain framework, enabling efficient and accurate action detection with reduced computational complexity. Dive into our repository to discover more about our research, codebase, and contributions to advancing the field of online action detection.
+
+## System overview
+Draw.io [link](https://drive.google.com/file/d/1Bwfq9d31ETHNoinpQw3PynawHrT-1wNT/view?usp=sharing) 
+
+![Training Pipeline](images/train_pipeline.jpg)
+
+![Test Pipeline](images/test_pipeline.jpg)
 
 ## Installation
-```bash
-conda create --name <user>_tni_oad python=3.8 -y
-conda activate <user>_tni_oad
+- Refer to [docs/installation.md](docs/installation.md) for installing necessary libs.
 
-# install pytorch
-conda install pytorch==1.13.0 torchvision==0.14.0 torchaudio==0.13.0 pytorch-cuda=11.7 -c pytorch -c nvidia -y
+### New Data 
+- Refer to [docs/data.md](docs/data.md) for to know how to label and create new dataset.
 
-# install mmengine, mmcv, mmpretrain, mmdet, mmpose
-pip install -U openmim
-mim install mmengine==0.8.4
-mim install mmcv==2.0.1
-mim install mmdet==3.1.0
-mim install mmpose==1.1.0
+## Usage
+- Refer to [docs/train_test.md](docs/train_test.md) for to know how train and test the model.
 
-# install mmaction2
-mim install mmaction2==1.1.0
+## Deployment
+- Refer to [docs/deployment.md](docs/deployment.md) for to know how convert model to ONNX.
 
-# install this repo
-python setup.py develop
-```
-
-## Test the installation
-```bash
-./scripts/demo.sh
-```
-
-##Running test  Pipeline
-```bash
-python running/oad_pipeline.py
---detection ,type=str, default="/models/person/yolox_s_hdet_vga_60e_onnxonly_1280x800.onnx", help='path to detection model'
---action ,type=str, default="/models/person/action_regcornize.onnx", help='path to action model'
---s_size ,type=tuple, default=(3,3), help='size of super image'
---threshold ,type=float, default=0.5, help='threshold of action model'
---input ,type=str, help='path to input video'
---save ,type=str, default='./cache/video', help='path to save video'
---class_name ,type=str, default='/data/its/oad/triet_test/class.txt', help='class name txt file'
---device , type=str , default ="gpu", help="cpu or gpu"
-```
+## Inference 
+- Refer to [docs/inference.md](docs/inference.md) for inference the model on video.
